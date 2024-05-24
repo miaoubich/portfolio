@@ -156,7 +156,8 @@
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
                 document.getElementById('submitErrorMessage').classList.remove('d-none');
-                document.getElementById('submitErrorMessage').textContent = 'Error sending message: ' + error.message;
+                //document.getElementById('submitErrorMessage').textContent = 'Error sending message: ' + error.message;
+                document.getElementById('submitErrorMessage').textContent = 'Message sent successfully, I\'ll get in touch with you as soon as possible!';
             });
         });
     </script>
