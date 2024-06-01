@@ -29,6 +29,7 @@
                             <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="resume.html">Resume</a></li>
                             <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
+                            <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
                         </ul>
                     </div>
@@ -50,6 +51,13 @@
                                 <!-- * * Contact Form * *-->
         
                                 <form id="contactForm">
+                                    <!-- Submit success message-->
+                                    <div class="d-none submitMessage" id="submitErrorMessage">Success Message!</div>
+                                    <!-- Submit error message-->
+                                    <!---->
+                                    <!-- This is what your users will see when there is-->
+                                    <!-- an error submitting the form-->
+                                    <!-- <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div> -->
                                     <!-- Name input-->
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="fullName" name="fullName" type="text" placeholder="Enter your name..." data-sb-validations="required" />
@@ -60,13 +68,15 @@
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
                                         <label for="email">Email address</label>
-                                        <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                        <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                                        <!-- <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                                        <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div> -->
+                                        <div class="invalid-feedback" id="emailInvalidFeedback">A valid email is required.</div>
                                     </div>
                                     <!-- Phone number input-->
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="phoneNumber" name="phoneNumber" type="tel" placeholder="((123) 456-7890)" data-sb-validations="required" />
                                         <label for="phoneNumber">Phone number (Optional)</label>
+                                        <div class="invalid-feedback" id="phoneInvalidFeedback">Phone number must be exactly 10 digits.</div>
                                     </div>
                                     <!-- Message Title input-->
                                     <div class="form-floating mb-3">
@@ -80,13 +90,7 @@
                                         <label for="message">Message</label>
                                         <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
                                     </div>
-                                    <!-- Submit success message-->
-                                
-                                    <!-- Submit error message-->
-                                    <!---->
-                                    <!-- This is what your users will see when there is-->
-                                    <!-- an error submitting the form-->
-                                    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                                    
                                     <!-- Submit Button-->
                                     <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" name="submitButton" type="submit">Submit</button></div>
                                 </form>
@@ -127,6 +131,27 @@
             const phoneNumber = document.getElementById('phoneNumber').value;
             const messageTitle = document.getElementById('messageTitle').value;
             const message = document.getElementById('message').value;
+
+            // Validate email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailValid = emailPattern.test(email);
+
+            if (!emailValid) {
+                document.getElementById('emailInvalidFeedback').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('emailInvalidFeedback').style.display = 'none';
+            }
+            // Validate phone number
+            const phonePattern = /^\d{10}$/;
+            const phoneValid = phonePattern.test(phoneNumber);
+
+            if (!phoneValid) {
+                document.getElementById('phoneInvalidFeedback').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('phoneInvalidFeedback').style.display = 'none';
+            }
     
             const data = {
                 fullName: fullName,
@@ -157,7 +182,16 @@
                 console.error('There was a problem with the fetch operation:', error);
                 document.getElementById('submitErrorMessage').classList.remove('d-none');
                 document.getElementById('contactForm').reset();
-                document.getElementById('submitErrorMessage').textContent = 'Message sent successfully, I\'ll get in touch with you as soon as possible!';
+                document.getElementById('submitErrorMessage').textContent = 'Message sent successfully!';
+                setTimeout(function() {
+                    var messageDiv = document.getElementById('submitErrorMessage');
+                    if (messageDiv) {
+                        messageDiv.style.opacity = '0';
+                    }
+                }, 5000);
+                setTimeout(function(){
+                    document.getElementById('submitErrorMessage').classList.add('d-none');
+                }, 5000);
             });
         });
     </script>
